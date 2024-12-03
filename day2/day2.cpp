@@ -150,7 +150,6 @@ void PartTwo()
         }
 
         std::cout << "Part one result " << result << std::endl;
-        // 299 
     }
     else
     {
