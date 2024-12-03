@@ -1,5 +1,8 @@
 # visual studio code
 .vscode
 
-# doing it on windows, sadly
+# doing it on windows, sadly...
 *.exe
+
+# ...but sometimes also on linux ^^
+*.out
