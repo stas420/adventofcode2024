@@ -8,7 +8,7 @@ const std::string test = "test.txt";
 const std::string input = "input.txt";
 
 // currently done by iterating through each report twice;
-// should probably be done with two alternating "pointers";
+// should probably be faster with two "pointers";
 // well whatevr
 constexpr int MAX_DIFF = 3;
 
@@ -146,7 +146,6 @@ void PartTwo()
 
             if (isSafePtTwo(levels))
             {
-                //std::cout << "safe";
                 result += 1;
             }
             else
@@ -156,8 +155,6 @@ void PartTwo()
                 if (isSafePtOne(levels))
                     result += 1;
             }
-
-            //std::cout << std::endl;
         }
 
         std::cout << "Part two result " << result << std::endl;
