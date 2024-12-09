@@ -47,6 +47,7 @@ std::int64_t factorial(const std::int64_t& n)
 
 std::int64_t Compute(const std::vector<std::int64_t>& Numbers, const std::vector<Operator>& Operators)
 {
+    /*
     std::cout << "[] ==== ";
     for (auto & x: Numbers)
     {
@@ -66,39 +67,33 @@ std::int64_t Compute(const std::vector<std::int64_t>& Numbers, const std::vector
         }
     }
 
-    std::int64_t out = 0;
-    std::int64_t mult = 0;
-    std::int64_t n = 0;
-    std::int64_t o = 0;
+    std::cout << "\n----------\n";
+    */
+   
+    std::int64_t tmp = Numbers[0];
+    std::int64_t i = 1;
+    std::int64_t j = 0;
 
-    mult = Numbers[0];
-
-    while(n < Numbers.size() && o < Operators.size())
+    while (i < Numbers.size() && j < Operators.size())
     {
-        std::cout << "mult " << mult << "\n";
+        //std::cout << "tmp " << tmp << std::endl;
 
-        if (Operators[o] == Operator::ADD)
+        if (Operators[j] == Operator::ADD)
         {
-            std::cout << "add to prev\n";
-            out += mult;
-            o++;
-            n++;
-            mult = Numbers[n];
+            tmp += Numbers[i];
         }
         else
         {
-            std::cout << "mult " << mult << "\n";
-            n++;
-            o++;
-            mult *= Numbers[n];
+            tmp *= Numbers[i];
         }
+        
+        i++;
+        j++;
     }
 
-    out += mult;
+    //std::cout << "\nout -> " << tmp << std::endl; 
 
-    std::cout << " -> " << out << std::endl;
-
-    return out;
+    return tmp;
 }
 
 bool Check(const std::vector<std::int64_t>& Numbers, const std::int64_t& Value)
@@ -108,7 +103,7 @@ bool Check(const std::vector<std::int64_t>& Numbers, const std::int64_t& Value)
 
     if (Value == Compute(Numbers, OperatorsSet))
     {
-        std::cout << ">> yee\n";
+        //std::cout << ">> yee\n";
         return true;
     }
 
@@ -123,7 +118,7 @@ bool Check(const std::vector<std::int64_t>& Numbers, const std::int64_t& Value)
 
         if (Value == Compute(Numbers, OperatorsSet))
         {
-            std::cout << ">> yee\n";
+            //std::cout << ">> yee\n";
             return true;
         }
 
@@ -145,18 +140,18 @@ bool Check(const std::vector<std::int64_t>& Numbers, const std::int64_t& Value)
             std::next_permutation(OperatorsSet.begin(), OperatorsSet.end(), operatorCompare)
         )
         {
-            std::cout << "perm\n";
+            //std::cout << "perm\n";
             if (Value == Compute(Numbers, OperatorsSet))
             {
-                std::cout << ">> yee\n";
+                //std::cout << ">> yee\n";
                 return true;
             }
 
-            std::cout << "> nope\n";
+            //std::cout << "> nope\n";
         }
     }
 
-    std::cout << "------------------------\n";
+    //std::cout << "------------------------\n";
 
     return false;
 }
@@ -204,16 +199,21 @@ int main()
     return 0;
 }
 
-        /*
-        for (auto& x : Equations)
-        {
-            std::cout << x.first << " = ";
+/*
 
-            for (auto& y : x.second)
-            {
-                std::cout << y << " ";
-            }
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;
-        */
+for (auto& x : Equations)
+{
+std::cout << x.first << " = ";
+
+for (auto& y : x.second)
+{
+    std::cout << y << " ";
+}
+std::cout << std::endl;
+}
+std::cout << std::endl;
+
+
+
+*/
+
