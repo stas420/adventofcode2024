@@ -6,10 +6,12 @@
 #include <limits>
 #include <algorithm>
 
+// this represents one file block 
+// for example input "4" creates 4 DiskSpaceChunk of ID 0 
+//
+// the same goes with "spaces" but the ID is set to maximum possible int64_t value, cuz why not
 struct DiskSpaceChunk
 {
-    std::uint64_t Position;
-    std::uint64_t Length;
     std::uint64_t ID;
 
     bool IsFile;
@@ -21,52 +23,47 @@ std::vector<DiskSpaceChunk> ParseDisk()
 
     if (file.is_open())
     {
-        std::vector<DiskSpaceChunk> Output;
         std::string line;
+        std::getline(file, line);        
+        file.close();
 
-        bool isFile = true;
+        std::vector<DiskSpaceChunk> Output;
+        Output.reserve(line.length());
+
+        std::int64_t num = 0;
         std::uint64_t IDCounter = 0;
-        DiskSpaceChunk tmp;
-        std::uint64_t len = 0;
+        DiskSpaceChunk ch;
+        bool isFile = true;
 
-        while(std::getline(file, line))
+        std::uint64_t j = 0;
+
+        for (std::uint64_t i = 0; i < line.length(); i++)
         {
+            num = std::stoi(std::string({ line[i], '\0' }));
 
-            for (std::uint64_t i = 0; i < line.length(); i++)
+            if (num > 0)
             {
-                len = std::stoi(std::string({ line[i], '\0'}));
+                ch.IsFile = isFile;
 
-                if (len > 0)
+                if (isFile)
                 {
-                    tmp.Position = i;
-                    tmp.Length = len;
-
-                    if (isFile)
-                    {
-                        tmp.ID = IDCounter;
-                        tmp.IsFile = true;
-                        IDCounter++;
-
-                        isFile = false;
-                    }
-                    else
-                    {
-                        tmp.ID = std::numeric_limits<std::uint64_t>::max();
-                        tmp.IsFile = false;
-                        
-                        isFile = true;
-                    }
-
-                    Output.push_back(tmp);
+                    ch.ID = IDCounter;
+                    IDCounter++;
                 }
                 else
                 {
-                    isFile = !isFile;
+                    ch.ID = std::numeric_limits<std::uint64_t>::max();
+                }
+
+                for (j = 0; j < num; j++)
+                {
+                    Output.push_back(ch);                    
                 }
             }
-        }
 
-        file.close();
+            isFile = !isFile;
+        }        
+
         return Output;
     }
     else
@@ -78,64 +75,142 @@ std::vector<DiskSpaceChunk> ParseDisk()
 
 void PartOne()
 {
+    // read and parse input
     std::vector<DiskSpaceChunk> ParsedDisk = ParseDisk();
-
-    for (auto&x : ParsedDisk)
-    {
-        if(x.IsFile)
-        {
-            for (int i = 0; i < x.Length; i++)
-                std::cout << x.ID;
-        }
-        else
-        {
-            for (int i = 0; i < x.Length; i++)
-                std::cout << ".";
-        }
-    }
-
-    std::cout << std::endl;
 
     std::uint64_t p = 0;
     std::uint64_t q = ParsedDisk.size() - 1;
-    DiskSpaceChunk tmp = ParsedDisk[p];
+    DiskSpaceChunk ch;
 
-    while (q > p)
+    // moving file blocks
+    while (p < q)
     {
         if (ParsedDisk[q].IsFile)
         {
             while(ParsedDisk[p].IsFile)
                 p++;
-            
-            tmp = ParsedDisk[p];
-            std::cout << tmp.Position << " | " << tmp.Length << std::endl;
+
+            if (p >= q)
+                break;
+
+            ch = ParsedDisk[p];
             ParsedDisk[p] = ParsedDisk[q];
-            ParsedDisk[q] = tmp;
+            ParsedDisk[q] = ch;
         }
 
         q--;
     }
 
-    for (auto&x : ParsedDisk)
+    std::int64_t answer = 0;
+
+    for (p = 0; p < ParsedDisk.size(); p++)
     {
-        if(x.IsFile)
-        {
-            for (int i = 0; i < x.Length; i++)
-                std::cout << x.ID;
-        }
-        else
-        {
-            for (int i = 0; i < x.Length; i++)
-                std::cout << ".";
-        }
+        if (ParsedDisk[p].IsFile)
+            answer += ParsedDisk[p].ID * p;
     }
 
-    std::cout << std::endl;
+    std::cout << "Part one result " << answer << std::endl;
+    // 6398608069280
+}
 
+bool FindSpaceIndex(std::vector<DiskSpaceChunk>& Disk, const std::uint64_t& SpaceSize, std::uint64_t& OutputIndex)
+{
+    const std::uint64_t IndexDiff = SpaceSize - 1;
+    std::uint64_t i = 0;
+    std::uint64_t j = 0;
+
+    while (i < Disk.size())
+    {
+        if (!Disk[i].IsFile)
+        {
+            j = i;
+
+            while (!Disk[i].IsFile && i < Disk.size())
+            {
+                if (i - j == IndexDiff)
+                {
+                    OutputIndex = j;
+                    return true;
+                }
+
+                i++;
+            }
+        }
+
+        i++;
+    }
+
+    return false;
+}
+
+void PartTwo()
+{
+    // read and parse input
+    std::vector<DiskSpaceChunk> ParsedDisk = ParseDisk();
+
+    // moving whole files...
+    DiskSpaceChunk ch;
+    std::uint64_t tmpID = 0;
+    std::uint64_t tmpIndex = 0;
+    std::uint64_t p = 0;
+    std::uint64_t q = ParsedDisk.size() - 1;
+
+    while (q > 0)
+    {
+        if (ParsedDisk[q].IsFile)
+        {
+            tmpID = ParsedDisk[q].ID;
+            tmpIndex = q;
+
+            do 
+            {
+                q--;
+
+            } while(ParsedDisk[q].ID == tmpID && q > 0);
+
+            // now I am pointing at the next file with 'q'
+
+            if (FindSpaceIndex(ParsedDisk, (tmpIndex - q) , p))
+            {
+                if (p < q)
+                {
+                    for (std::uint64_t i = 0; i < (tmpIndex - q); i++)
+                    {
+                        ch = ParsedDisk[p + i];
+                        ParsedDisk[p + i] = ParsedDisk[tmpIndex - i];
+                        ParsedDisk[tmpIndex - i] = ch;
+                    }
+                }
+            }
+        }
+        else
+            q--;
+    }
+
+    std::int64_t answer = 0;
+
+    for (p = 0; p < ParsedDisk.size(); p++)
+    {
+        if (ParsedDisk[p].IsFile)
+            answer += ParsedDisk[p].ID * p;
+    }
+
+    std::cout << "Part two result " << answer << std::endl;
+    // 6427437134372
 }
 
 int main()
 {
-    PartOne();
+    //PartOne();
+    PartTwo();
     return 0;
 }
+
+/*
+
+
+    std::uint64_t i = 0;
+    if (FindSpaceIndex(ParsedDisk, 3, i))
+        std::cout << "found at " << i << std::endl;
+
+*/
