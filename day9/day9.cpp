@@ -168,22 +168,23 @@ void PartTwo()
 
             } while(ParsedDisk[q].ID == tmpID && q > 0);
 
-            // now I am pointing at the next file with 'q'
+            // after the do-while, I am pointing with 'q' at the next file 
 
-            if (FindSpaceIndex(ParsedDisk, (tmpIndex - q) , p))
+            // found index should be to the left of the end of the file
+            // otherwise it will not be "moving files to the left"
+            if (FindSpaceIndex(ParsedDisk, (tmpIndex - q), p) && (p < q))
             {
-                if (p < q)
+                for (std::uint64_t i = 0; i < (tmpIndex - q); i++)
                 {
-                    for (std::uint64_t i = 0; i < (tmpIndex - q); i++)
-                    {
-                        ch = ParsedDisk[p + i];
-                        ParsedDisk[p + i] = ParsedDisk[tmpIndex - i];
-                        ParsedDisk[tmpIndex - i] = ch;
-                    }
+                    // mm, some index fun UwU
+                    ch = ParsedDisk[p + i];
+                    ParsedDisk[p + i] = ParsedDisk[tmpIndex - i];
+                    ParsedDisk[tmpIndex - i] = ch;
                 }
             }
         }
-        else
+        // this else is important, due to the way 'q' works above
+        else 
             q--;
     }
 
