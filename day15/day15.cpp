@@ -188,23 +188,7 @@ void MoveTheRobotButWider(vector<string>& MutableMap, pair<int64_t, int64_t>& Mu
         {
             while (_Position != MutablePosition)
             {
-                if (MutableMap[_Position.first][_Position.second] == '[')
-                {
-                    MutableMap[_Position.first][_Position.second] = 
-                    MutableMap[_Position.first + _Direction.first][_Position.second + _Direction.second];
-
-                    MutableMap[_Position.first][_Position.second + 1] = 
-                    MutableMap[_Position.first + _Direction.first][_Position.second + 1 + _Direction.second];
-                }
-                else if (MutableMap[_Position.first][_Position.second] == ']')
-                {
-                    MutableMap[_Position.first][_Position.second - 1] = 
-                    MutableMap[_Position.first + _Direction.first][_Position.second - 1 + _Direction.second];
-
-                    MutableMap[_Position.first][_Position.second] = 
-                    MutableMap[_Position.first + _Direction.first][_Position.second + _Direction.second];
-                }
-
+                
                 _Position.first -= _Direction.first;
                 _Position.second -= _Direction.second;        
             }
