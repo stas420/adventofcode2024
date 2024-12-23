@@ -1,0 +1,76 @@
+current progress:
+- day01
+    - [x] part1
+    - [x] part2
+- day02
+    - [x] part1
+    - [x] part2
+- day03
+    - [x] part1
+    - [x] part2
+- day04
+    - [ ] part1
+    - [ ] part2
+- day05
+    - [x] part1
+    - [x] part2
+- day06
+    - [x] part1
+    - [ ] part2
+- day07
+    - [x] part1
+    - [ ] part2
+- day08
+    - [x] part1
+    - [ ] part2
+- day09
+    - [x] part1
+    - [x] part2
+- day10
+    - [ ] part1
+    - [ ] part2
+- day11
+    - [x] part1
+    - [x] part2
+- day12
+    - [ ] part1
+    - [ ] part2
+- day13
+    - [x] part1
+    - [x] part2
+- day14
+    - [x] part1
+    - [ ] part2
+- day15
+    - [x] part1
+    - [ ] part2
+- day16
+    - [ ] part1
+    - [ ] part2
+- day17
+    - [x] part1
+    - [ ] part2
+- day18
+    - [ ] part1
+    - [ ] part2
+- day19
+    - [ ] part1
+    - [ ] part2
+- day20
+    - [ ] part1
+    - [ ] part2
+- day21
+    - [ ] part1
+    - [ ] part2
+- day22
+    - [x] part1
+    - [x] part2
+- day23
+    - [ ] part1
+    - [ ] part2
+- day24
+    - [ ] part1
+    - [ ] part2
+- day25
+    - [ ] part1
+    - [ ] part2
