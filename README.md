@@ -66,7 +66,7 @@ current progress:
     - [x] part1
     - [x] part2
 - day23
-    - [ ] part1
+    - [x] part1
     - [ ] part2
 - day24
     - [ ] part1
